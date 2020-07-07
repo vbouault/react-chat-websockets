@@ -20,6 +20,12 @@ io.on('connect', (socket) => {
     console.log('user disconnected');
   });
   socket.emit('initialMessageList', messages);
+  socket.on('messageFromClient', (messageTextAndAuthor) => {
+    const newMessage = {id: uniqid(), ...messageTextAndAuthor}
+    console.log('new message from a client: ', newMessage)
+    messages.push(newMessage)
+    io.emit('reloadMessageList', newMessage);
+  })
 });
 
 

@@ -17,7 +17,13 @@ function App() {
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log(socket)
+    socket.emit('messageFromClient', {
+      text: newMessageText, 
+      author: nickName
+    })
+    setNickName('')
+    setNewMessageText('')
+    
   }
 
   useEffect(() => {
@@ -26,9 +32,10 @@ function App() {
     socket.on('initialMessageList', (messages) => {
       setMessageList(messages)
     });
+    socket.on('reloadMessageList', (newMessage) => {
+      setMessageList((messageList) => [...messageList, newMessage])
+    });
   }, [])
-
-  
 
   return (
     <div className="App">
