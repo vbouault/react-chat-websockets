@@ -1,4 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import socketIOClient from "socket.io-client";
+
+
+
+// When the component mounts :
+
+// TODO: set the socket in the state to use it later
+
 
 function App() {
   const [messageList, setMessageList] = useState([])
@@ -6,9 +14,21 @@ function App() {
   const [newMessageText, setNewMessageText] = useState('')
   const [socket, setSocket] = useState(null)
 
+
   const handleSubmit = e => {
     e.preventDefault()
+    console.log(socket)
   }
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:3000')
+    setSocket(socket)
+    socket.on('initialMessageList', (messages) => {
+      setMessageList(messages)
+    });
+  }, [])
+
+  
 
   return (
     <div className="App">
